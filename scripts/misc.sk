@@ -1,27 +1,237 @@
-command /rpg [<text>]:
-	permission: core.staffchat
-	permission message: &cThis command is not for you.
-	trigger:
-		teleport player to location(-7.5, -56, 42.5, world "rpg", 90, 0)
+on death:
+  if victim is a player:
+    cancel xp drops
+    keep the xp
+on respawn:
+  teleport player to {spawn}
 
-command /givecustomitem [<text>] [<player>] [<integer>]:
-	permission: core.staffchat
-	permission message: &cThis command is not for you.
-	aliases: gci
-	trigger:
-		if arg-3 is not set:
-			set {_amt} to 1
-		else:
-			set {_amt} to arg-3
-		if {rpg::item::%arg-1%} is not set:
-			send "&8» &7The item with the ID &c%arg-1%&7 does not exist." to the player
-			play sound "entity.villager.no" to the player
-			stop
-		play sound "entity.experience_orb.pickup" to the player
-		if arg-2 is set:
-			give {_amt} of {rpg::item::%arg-1%} to arg-2
-			send "&8» &7Gave %{_amt}% &f%arg-1% &7to &f%arg-2%&7." to the player
-			send "&8» &7%player% &7gave you %{_amt}% &f%arg-1%&7." to arg-2
-		else:
-			give {_amt} of {rpg::item::%arg-1%} to the player
-			send "&8» &7Giving %{_amt}% &f%arg-1%&7." to the player
+on join:
+  execute console command "recipe take %player% *"
+  wait 2 ticks
+  execute console command "recipe give %player% *"
+
+command /enderchest [<offlineplayer>]:
+  aliases: ec
+  trigger:
+    if arg 1 is not set:
+      open player's ender chest to player
+      play sound "block.ender_chest.open" to player
+    else:
+      if player has permission "core.endersee":
+        if arg 1 is online:
+          open arg 1's ender chest to player
+          send "&8» &7Opened &f%arg 1%&7's ender chest."
+          play sound "block.ender_chest.open" to player
+        else:
+          send "&8» &cPlayer not found or offline." to player
+      else:
+        open player's ender chest to player
+        play sound "block.ender_chest.open" to player
+
+on tab complete of "/fix" or "/repair":
+  set tab completions for position 1 to "all"
+
+command /repair [<text>]:
+  aliases: fix
+  trigger:
+    if arg 1 is not set:
+      if {tokens::%uuid of player%} is greater or equal to 4:
+        if player's tool is any armor or any tool or any weapon or shears or fishing rod or flint and steel:
+          repair tool of player
+          send "&8» &7Held item repaired to full durability."
+          play sound "block.note_block.bass" to player
+          remove 4 from {tokens::%uuid of player%}
+        else:
+          send "&8» &7Held item could not be repaired."
+          play sound "block.note_block.bass" to player
+      else:
+        send "&8» &7Repairing your held item costs 4 tokens."
+        play sound "block.note_block.bass" to player
+    else:
+      if arg 1 is "all":
+        if {tokens::%uuid of player%} is greater or equal to 8:
+          repair tool of player
+          if player's helmet is set:
+            repair helmet of player
+          if player's chestplate is set:
+            repair chestplate of player
+          if player's leggings is set:
+            repair leggings of player
+          if player's boots is set:
+            repair boots of player
+          send "&8» &7Held item and armour repaired to full durability."
+          play sound "block.note_block.bass" to player
+          remove 8 from {tokens::%uuid of player%}
+        else:
+          send "&8» &7Repairing your held item and armour costs 8 tokens."
+          play sound "block.note_block.bass" to player
+      else:
+        if {tokens::%uuid of player%} is greater or equal to 4:
+          if player's tool is any armor or any tool or any weapon or shears or fishing rod or flint and steel:
+            repair tool of player
+            send "&8» &7Held item repaired to full durability."
+            play sound "block.note_block.bass" to player
+            remove 4 from {tokens::%uuid of player%}
+          else:
+            send "&8» &7Held item could not be repaired."
+            play sound "block.note_block.bass" to player
+        else:
+          send "&8» &7Repairing your held item costs 4 tokens."
+          play sound "block.note_block.bass" to player
+
+on load:
+  register new shapeless recipe for 4 string using white wool, air, air, air, air, air, air, air, air with id "stringWhite"
+  register new shapeless recipe for 4 string using orange wool, air, air, air, air, air, air, air, air with id "stringOrange"
+  register new shapeless recipe for 4 string using magenta wool, air, air, air, air, air, air, air, air with id "stringMagenta"
+  register new shapeless recipe for 4 string using light blue wool, air, air, air, air, air, air, air, air with id "stringLightBlue"
+  register new shapeless recipe for 4 string using yellow wool, air, air, air, air, air, air, air, air with id "stringYellow"
+  register new shapeless recipe for 4 string using lime wool, air, air, air, air, air, air, air, air with id "stringLime"
+  register new shapeless recipe for 4 string using pink wool, air, air, air, air, air, air, air, air with id "stringPink"
+  register new shapeless recipe for 4 string using gray wool, air, air, air, air, air, air, air, air with id "stringGray"
+  register new shapeless recipe for 4 string using light gray wool, air, air, air, air, air, air, air, air with id "stringLightGray"
+  register new shapeless recipe for 4 string using cyan wool, air, air, air, air, air, air, air, air with id "stringCyan"
+  register new shapeless recipe for 4 string using purple wool, air, air, air, air, air, air, air, air with id "stringPurple"
+  register new shapeless recipe for 4 string using blue wool, air, air, air, air, air, air, air, air with id "stringBlue"
+  register new shapeless recipe for 4 string using brown wool, air, air, air, air, air, air, air, air with id "stringBrown"
+  register new shapeless recipe for 4 string using green wool, air, air, air, air, air, air, air, air with id "stringGreen"
+  register new shapeless recipe for 4 string using red wool, air, air, air, air, air, air, air, air with id "stringRed"
+  register new shapeless recipe for 4 string using black wool, air, air, air, air, air, air, air, air with id "stringBlack"
+  register new shaped recipe for 1 leather using rotten flesh, rotten flesh, rotten flesh, rotten flesh, air, air, air, air, air with id "leather"
+  register new shaped recipe for 2 oak wood planks using stick, stick, stick, stick, air, air, air, air, air with id "planks"
+  register new shaped recipe for 1 name tag using flint, string, paper, paper, air, air, air, air, air with id "name_tag"
+  register new shaped recipe for 1 bundle using string, air, string, rabbit hide, air, rabbit hide, air, rabbit hide, air with id "bundle"
+  register new shaped recipe for 1 budding amethyst using amethyst shard, amethyst shard, amethyst shard, amethyst shard, amethyst block, amethyst shard, amethyst shard, amethyst shard, amethyst shard with id "budding_amethyst"
+  register new shaped recipe for 1 wither skeleton skull using coal block, coal, coal block, coal, bone, coal, coal block, coal, coal block with id "wither_skeleton_skull"
+  register new shaped recipe for 1 elytra using leather, lead, leather, phantom membrane, feather, phantom membrane, phantom membrane, air, phantom membrane with id "elytra"
+  register new shapeless recipe for 4 experience bottle using lapis lazuli, lapis lazuli, lapis lazuli, lapis lazuli, glass bottle, air, air, air, air with id "experience_bottle"
+
+command /recipes [<text>]:
+  trigger:
+    play sound "block.note_block.bit" at pitch 0 to player
+    send ""
+    send "&8» &7The list, crafting ingredients and set-up for each custom recipe is available in the &f##info&7 channel in the Discord server."
+    send "&8» <link:https://discord.gg/Ng94gMqCY9><tooltip:&7Click to join!>&7&nClick here&7 to join the Discord server and stay updated on server changes."
+    send ""
+
+on mine:
+  if event-block is an oak log:
+    clear the drops
+    drop 1 oak log at event-block
+    set {_c1} to a random integer between 2 and 3
+    set {_c2} to a random integer between 1 and 4
+    drop {_c1} of oak planks at event-block
+    drop {_c2} of stick at event-block
+
+on mine:
+  if event-block is a birch log:
+    clear the drops
+    drop 1 birch log at event-block
+    set {_c1} to a random integer between 2 and 3
+    set {_c2} to a random integer between 1 and 4
+    drop {_c1} of birch planks at event-block
+    drop {_c2} of stick at event-block
+
+on mine:
+  if event-block is a spruce log:
+    clear the drops
+    drop 1 spruce log at event-block
+    set {_c1} to a random integer between 2 and 3
+    set {_c2} to a random integer between 1 and 4
+    drop {_c1} of spruce planks at event-block
+    drop {_c2} of stick at event-block
+
+on mine:
+  if event-block is an acacia log:
+    clear the drops
+    drop 1 acacia log at event-block
+    set {_c1} to a random integer between 2 and 3
+    set {_c2} to a random integer between 1 and 4
+    drop {_c1} of acacia planks at event-block
+    drop {_c2} of stick at event-block
+
+on mine:
+  if event-block is a dark oak log:
+    clear the drops
+    drop 1 dark oak log at event-block
+    set {_c1} to a random integer between 2 and 3
+    set {_c2} to a random integer between 1 and 4
+    drop {_c1} of dark oak planks at event-block
+    drop {_c2} of stick at event-block
+
+on mine:
+  if event-block is a crimson stem:
+    clear the drops
+    drop 1 crimson stem at event-block
+    set {_c1} to a random integer between 2 and 3
+    set {_c2} to a random integer between 1 and 4
+    drop {_c1} of crimson planks at event-block
+    drop {_c2} of stick at event-block
+
+on mine:
+  if event-block is a warped stem:
+    clear the drops
+    drop 1 warped stem at event-block
+    set {_c1} to a random integer between 2 and 3
+    set {_c2} to a random integer between 1 and 4
+    drop {_c1} of warped planks at event-block
+    drop {_c2} of stick at event-block
+
+on damage:
+  if type of attacker's tool is pufferfish:
+    if attacker has armour:
+      if attacker's helmet is enchanted with thorns:
+        add 1 to {_damage}
+      if attacker's chestplate is enchanted with thorns:
+        add 1 to {_damage}
+      if attacker's leggings is enchanted with thorns:
+        add 1 to {_damage}
+      if attacker's boots is enchanted with thorns:
+        add 1 to {_damage}
+      if victim's health is greater than 5:
+        remove 1 + {_damage} from victim's health
+      else if victim's health is less than 5:
+        if victim's health is greater than 1:
+          remove 2 from victim's health
+      if {_damage} is 0:
+        if victim's health is greater than 2:
+          remove 2 from victim's health
+        apply poison 2 to victim for 5 seconds
+      else:
+        apply poison 2 to victim for 7 seconds
+    else:
+      if victim's health is greater than 2:
+        remove 2 from victim's health
+      apply poison 2 to victim for 5 seconds
+
+on death:
+  if victim is a player:
+    if attacker is a player:
+      set {_c} to a random integer between 1 and 10
+      if {_c} is 1:
+        drop 1 of victim's skull at event-location
+
+function format(n: number) :: text:
+  set {_data} to "QT,18|Q,15|T,12|B,9|M,6|k,3"
+  loop split {_data} at "|":
+    set {_s::*} to split loop-value at ","
+    {_n} >= 10 ^ {_s::2} parsed as number
+    return "%{_n} / 10 ^ {_s::2} parsed as number%%{_s::1}%"
+  return "%{_n}%"
+
+every 1 second:
+  loop all players:
+    if {enchapplecooldown::%uuid of loop-player%} is set:
+      if {enchapplecooldown::%uuid of loop-player%} is 0 seconds:
+        delete {enchapplecooldown::%uuid of loop-player%}
+      else:
+        remove 1 second from {enchapplecooldown::%uuid of loop-player%}
+
+on consume:
+  if type of event-item is enchanted golden apple:
+    if {enchapplecooldown::%uuid of player%} is not set:
+      if {combattimer::%uuid of player%} is set:
+        set {enchapplecooldown::%uuid of player%} to 15 seconds
+    else:
+      send action bar "&7This is on cooldown for %{enchapplecooldown::%uuid of player%}%&7." to player
+      play sound "item.shield.break" to player
+      cancel event

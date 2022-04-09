@@ -25,6 +25,8 @@
 		"cli"
 	],
 	"dependencies": {
-		"fs": "^0.0.1-security"
+		"chalk": "^5.0.1",
+		"fs": "^0.0.1-security",
+		"node-fetch": "^3.2.3"
 	}
 }
