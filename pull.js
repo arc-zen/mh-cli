@@ -30,20 +30,22 @@ export async function pull(server_id, auth, x_session_id) {
 				})
 					.then(i++)
 					.then((response) => response.json())
+					.then(console.log(chalk.green.bold("GOT! ") + chalk.gray(file.name + "/" + nested_file.name)))
 					.catch((err) => console.error(err));
-				if (fs.readFileSync(`./scripts/${file.name}/${nested_file.name}`, "utf8") === nested_resp.content) {
-					console.log(chalk.cyan(`no changes for ${nested_file.name}, skipping`));
-					continue;
-				}
-				console.log(chalk.green.bold("GOT! ") + chalk.gray(file.name + "/" + nested_file.name));
-				// write files
-				// ignore if nothing changed
-				if (!fs.existsSync(`./scripts/${file.name}/`)) {
-					fs.mkdirSync(`./scripts/${file.name}/`);
-				}
-				fs.writeFileSync(`./scripts/${file.name}/${nested_file.name}`, nested_resp.content, () => {
+				if (!fs.existsSync(`./scripts/${file.name}/${nested_file.name}`)) {
+					if (fs.readFileSync(`./scripts/${file.name}/${nested_file.name}`, "utf8") === nested_resp.content) {
+						console.log(chalk.cyan(`no changes for ${nested_file.name}, skipping`));
+						continue;
+					}
+					// write files
+					if (!fs.existsSync(`./scripts/${file.name}/`)) {
+						fs.mkdirSync(`./scripts/${file.name}/`);
+					}
+					fs.writeFileSync(`./scripts/${file.name}/${nested_file.name}`, nested_resp.content);
 					console.log(chalk.green.bold("WROTE! ") + chalk.gray(nested_file.name) + chalk.gray(` to ./scripts/${file.name}`));
-				});
+				} else {
+					console.log(chalk.green.bold("CREATED! ") + chalk.gray(nested_file.name) + chalk.gray(` to ./scripts/${file.name}`));
+				}
 			}
 		} else {
 			// read files
@@ -54,16 +56,19 @@ export async function pull(server_id, auth, x_session_id) {
 			})
 				.then(i++)
 				.then((response) => response.json())
+				.then(console.log(chalk.green.bold("GOT! ") + chalk.gray(file.name)))
 				.catch((err) => console.error(err));
-			if (fs.readFileSync(`./scripts/${file.name}`, "utf8") === resp.content) {
-				console.log(chalk.cyan(`no changes for ${file.name}, skipping`));
-				continue;
-			}
-			// write files
-			// ignore if nothing changed
-			fs.writeFileSync(`./scripts/${file.name}`, resp.content, () => {
+			if (fs.existsSync(`./scripts/${file.name}`)) {
+				if (fs.readFileSync(`./scripts/${file.name}`, "utf8") === resp.content) {
+					console.log(chalk.cyan(`no changes for ${file.name}, skipping`));
+					continue;
+				}
+				// write files
+				fs.writeFileSync(`./scripts/${file.name}`, resp.content);
 				console.log(chalk.green.bold("WROTE! ") + chalk.gray(file.name) + chalk.gray(" to ./scripts/"));
-			});
+			} else {
+				console.log(chalk.green.bold("CREATED! ") + chalk.gray(file.name) + chalk.gray(" to ./scripts/"));
+			}
 		}
 	}
 }

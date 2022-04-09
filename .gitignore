@@ -1,3 +1,4 @@
 user-config.js
 node_modules
 scripts/*
+!scripts/README.md
