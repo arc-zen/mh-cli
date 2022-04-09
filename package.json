@@ -1,0 +1,23 @@
+{
+	"type": "module",
+	"name": "mh-cli",
+	"version": "1.0.0",
+	"description": "minehut dashboard brought to your terminal",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/arc-zen/mhcli.git"
+	},
+	"author": "arczen#7561",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/arc-zen/mhcli/issues"
+	},
+	"homepage": "https://github.com/arc-zen/mhcli#readme",
+	"bin": {
+		"mh": "index.js"
+	}
+}
