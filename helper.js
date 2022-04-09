@@ -1,5 +1,7 @@
 import fetch from "node-fetch";
 import chalk from "chalk";
+import fs from "fs";
+import { join } from "path";
 export async function getServerId(server) {
 	return (await fetch(`https://api.minehut.com/server/${server}?byName=true`).then((response) => response.json())).server._id;
 }
@@ -78,4 +80,18 @@ export async function editFile(authorization, x_session_id, server_id, file_path
 	})
 		.then(console.log(chalk.green.bold("successfully edited file")))
 		.then(console.log(chalk.green(`took ${Date.now() - start_time}ms`)));
+}
+// note that the argument takes in the LOCAL PATH to the file
+// (the one that we have in the /scripts/ folder)
+export function toPayloadableJSON(file) {
+	try {
+		let data = fs.readFileSync(file, "utf8");
+		data = data.split("\n");
+		data = data.join("");
+		return data;
+	} catch (err) {
+		console.error(chalk.red.bold("failed to read file\nreport to arczen ASAP ty o7"));
+		console.log(err);
+		process.exit();
+	}
 }

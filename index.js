@@ -15,8 +15,9 @@ if (args.length === 0) {
 }
 const server_id = await helper.getServerId(userconfig.server);
 console.log(args);
+const content = helper.toPayloadableJSON("./scripts/misc.sk");
 // const script_files = await helper.getSkriptFiles(server_id, userconfig.authorization, userconfig.x_session_id);
 // console.log(helper.formatFiles(script_files, "skript"));
 // let content = "# hello wORLDLDLLDLDD";
-// helper.editFile(userconfig.authorization, userconfig.x_session_id, server_id, "/plugins/Skript/scripts/", "test.sk", content, true);
+helper.editFile(userconfig.authorization, userconfig.x_session_id, server_id, "/plugins/Skript/scripts/", "test.sk", content, true);
 // console.log(await helper.getServerId(userconfig.server));

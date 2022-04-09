@@ -1,0 +1,27 @@
+command /rpg [<text>]:
+	permission: core.staffchat
+	permission message: &cThis command is not for you.
+	trigger:
+		teleport player to location(-7.5, -56, 42.5, world "rpg", 90, 0)
+
+command /givecustomitem [<text>] [<player>] [<integer>]:
+	permission: core.staffchat
+	permission message: &cThis command is not for you.
+	aliases: gci
+	trigger:
+		if arg-3 is not set:
+			set {_amt} to 1
+		else:
+			set {_amt} to arg-3
+		if {rpg::item::%arg-1%} is not set:
+			send "&8» &7The item with the ID &c%arg-1%&7 does not exist." to the player
+			play sound "entity.villager.no" to the player
+			stop
+		play sound "entity.experience_orb.pickup" to the player
+		if arg-2 is set:
+			give {_amt} of {rpg::item::%arg-1%} to arg-2
+			send "&8» &7Gave %{_amt}% &f%arg-1% &7to &f%arg-2%&7." to the player
+			send "&8» &7%player% &7gave you %{_amt}% &f%arg-1%&7." to arg-2
+		else:
+			give {_amt} of {rpg::item::%arg-1%} to the player
+			send "&8» &7Giving %{_amt}% &f%arg-1%&7." to the player
