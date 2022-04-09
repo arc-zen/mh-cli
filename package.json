@@ -18,6 +18,10 @@
 	},
 	"homepage": "https://github.com/arc-zen/mhcli#readme",
 	"bin": {
-		"mh": "index.js"
-	}
+		"mh-cli": "index.js"
+	},
+	"keywords": [
+		"minehut",
+		"cli"
+	]
 }

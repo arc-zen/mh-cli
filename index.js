@@ -14,7 +14,9 @@ if (args.length === 0) {
 	}
 }
 const server_id = await helper.getServerId(userconfig.server);
-const files = await helper.getServerFiles(server_id, "application/json; charset=utf-8", userconfig.authorization, userconfig.x_session_id);
 console.log(args);
-console.log(server_id);
-console.log(files);
+// const script_files = await helper.getSkriptFiles(server_id, userconfig.authorization, userconfig.x_session_id);
+// console.log(helper.formatFiles(script_files, "skript"));
+// let content = "# hello wORLDLDLLDLDD";
+// helper.editFile(userconfig.authorization, userconfig.x_session_id, server_id, "/plugins/Skript/scripts/", "test.sk", content, true);
+// console.log(await helper.getServerId(userconfig.server));
